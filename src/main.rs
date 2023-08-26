@@ -1,5 +1,8 @@
-use iced::widget::{Text, Row, container};
-use iced::{Sandbox, Element, Settings, Application, executor, Command,Theme};
+use std::error::Error;
+
+use iced::widget::{Text, Row, Container};
+use iced::{Element, Settings, Application, executor, Command,Theme, Length};
+use iced::alignment::{Horizontal,Vertical};
 
 #[derive(Default)]
 struct Model;
@@ -23,14 +26,17 @@ impl Application for Model {
        let Heading = Text::new("Register Calculator".to_string()).into();
        let row = Row::with_children(vec![Heading]);
 
-       container(row).into()
+       Container::new(row)
+       .align_x(Horizontal::Center)
+       .width(Length::Fill)
+       .into()
     }
 
-     fn update(&mut self, message: Message)->Command<Message> {
+     fn update(&mut self, _message: Message)->Command<Message> {
           todo!()
     }
 }
 
-fn main(){
-    Model::run(Settings::default());
+fn main()->Result<(),iced::Error>{
+      Model::run(Settings::default())
 }
