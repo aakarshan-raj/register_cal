@@ -7,12 +7,14 @@ use iced::alignment::{Horizontal,Vertical};
 
 #[derive(Default)]
 struct Model{
-    check:i32
+    input_value_one:i32,
+    input_value_two:i32,
+    answer:i32,
 }
 #[derive(Debug, Clone, Copy)]
 pub enum Message {
-  Increment,
-  Decrement,
+  Sub,
+  Add,
 }
 
 impl Application for Model {
@@ -21,7 +23,7 @@ impl Application for Model {
     type Theme = Theme;
     type Flags = ();
     fn new(Flag:Self::Flags)->(Self,Command<Message>){
-        (Model{check:0},Command::none())
+        (Model{input_value_one:0,input_value_two:3,answer:0},Command::none())
     }
     fn title(&self) -> String {
         String::from("x64 Intel Register Calculator")
@@ -29,12 +31,12 @@ impl Application for Model {
      fn view(&self) -> Element<Message> {
        let Heading = Text::new("Register Calculator".to_string()).into();
        let row_one = Row::with_children(vec![Heading]);
-       let add_button:Element<Message> = button("ADD").on_press(Message::Increment).into();
-       let sub_button:Element<Message> = button("SUB").on_press(Message::Decrement).into();
+       let add_button:Element<Message> = button("ADD").on_press(Message::Add).into();
+       let sub_button:Element<Message> = button("SUB").on_press(Message::Sub).into();
        let row_two = Row::with_children(vec![add_button,sub_button]).spacing(80).padding(10);
-       let text:Element<Message> = Text::new(self.check.to_string()).into();
-       let input_one:Element<Message> = TextInput::new("R1 Register", "").into();
-       let input_two:Element<Message> = TextInput::new("R2 Register", "").into();
+       let text:Element<Message> = Text::new(self.answer.to_string()).into();
+       let input_one:Element<Message> = TextInput::new("R1 Register", &self.input_value_one.to_string()).into();
+       let input_two:Element<Message> = TextInput::new("R2 Register", &self.input_value_two.to_string()).into();
 
        let col = column![row_one,input_one,row_two,input_two,text];
        Container::new(col)
@@ -44,8 +46,8 @@ impl Application for Model {
 
      fn update(&mut self, message: Message)->Command<Message> {
           match message {
-              Message::Decrement=>{self.check -= 1},
-              Message::Increment=>{self.check += 1},
+              Message::Add=>{self.answer = self.input_value_one+self.input_value_two},
+              Message::Sub=>{self.answer = self.input_value_one-self.input_value_two},
           }
           Command::none()
     }
