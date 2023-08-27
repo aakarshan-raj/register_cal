@@ -1,14 +1,18 @@
 use std::error::Error;
 
-use iced::widget::{Text, Row, Container};
+use iced::mouse::Button;
+use iced::widget::{Text, Row, Container, button, column};
 use iced::{Element, Settings, Application, executor, Command,Theme, Length};
 use iced::alignment::{Horizontal,Vertical};
 
 #[derive(Default)]
-struct Model;
+struct Model{
+    check:i32
+}
 #[derive(Debug, Clone, Copy)]
 pub enum Message {
-  
+  Increment,
+  Decrement,
 }
 
 impl Application for Model {
@@ -17,23 +21,31 @@ impl Application for Model {
     type Theme = Theme;
     type Flags = ();
     fn new(Flag:Self::Flags)->(Self,Command<Message>){
-        (Model,Command::none())
+        (Model{check:0},Command::none())
     }
     fn title(&self) -> String {
         String::from("x64 Intel Register Calculator")
     }
      fn view(&self) -> Element<Message> {
        let Heading = Text::new("Register Calculator".to_string()).into();
-       let row = Row::with_children(vec![Heading]);
-
-       Container::new(row)
+       let row_one = Row::with_children(vec![Heading]);
+       let add_button:Element<Message> = button("ADD").on_press(Message::Increment).into();
+       let sub_button:Element<Message> = button("SUB").on_press(Message::Decrement).into();
+       let row_two = Row::with_children(vec![add_button,sub_button]).spacing(80).padding(10);
+       let text:Element<Message> = Text::new(self.check.to_string()).size(50).horizontal_alignment(Horizontal::Center).width(Length::Shrink).into();
+       let col = column![row_one,row_two,text];
+       Container::new(col)
        .align_x(Horizontal::Center)
        .width(Length::Fill)
        .into()
     }
 
-     fn update(&mut self, _message: Message)->Command<Message> {
-          todo!()
+     fn update(&mut self, message: Message)->Command<Message> {
+          match message {
+              Message::Decrement=>{self.check -= 1},
+              Message::Increment=>{self.check += 1},
+          }
+          Command::none()
     }
 }
 
