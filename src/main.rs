@@ -1,7 +1,7 @@
 use std::error::Error;
 
 use iced::mouse::Button;
-use iced::widget::{Text, Row, Container, button, column};
+use iced::widget::{Text, Row, Container, button, column, TextInput, text_input};
 use iced::{Element, Settings, Application, executor, Command,Theme, Length};
 use iced::alignment::{Horizontal,Vertical};
 
@@ -33,11 +33,15 @@ impl Application for Model {
        let sub_button:Element<Message> = button("SUB").on_press(Message::Decrement).into();
        let row_two = Row::with_children(vec![add_button,sub_button]).spacing(80).padding(10);
        let text:Element<Message> = Text::new(self.check.to_string()).size(50).horizontal_alignment(Horizontal::Center).width(Length::Shrink).into();
-       let col = column![row_one,row_two,text];
+       let input_one:Element<Message> = TextInput::new("R1 Register", "").into();
+       let input_two:Element<Message> = TextInput::new("R2 Register", "").into();
+
+       let col = column![row_one,input_one,row_two,input_two,text];
        Container::new(col)
        .align_x(Horizontal::Center)
        .width(Length::Fill)
        .into()
+       
     }
 
      fn update(&mut self, message: Message)->Command<Message> {
