@@ -1,5 +1,5 @@
 use iced::widget::{column, row, Button, Container, Row, Text, TextInput};
-use iced::{executor, window, Application, Command, Element, Settings, Theme};
+use iced::{executor, window, Application, Command, Element, Settings, Theme, Length};
 
 #[derive(Default)]
 struct Model {
@@ -34,7 +34,11 @@ impl Application for Model {
         String::from("x64 Intel Register Calculator")
     }
     fn view(&self) -> Element<Message> {
-        let heading: Element<Message> = Text::new("Register Calculator".to_string()).into();
+        let heading: Element<Message> = Text::new("Register Calculator".to_string())
+        .width(Length::Fill)
+        .horizontal_alignment(iced::alignment::Horizontal::Center)
+        .size(20)
+        .into();
         let add_button: Element<Message> = Button::new("ADD").on_press(Message::Add).into();
         let sub_button: Element<Message> = Button::new("SUB").on_press(Message::Sub).into();
 
@@ -54,8 +58,8 @@ impl Application for Model {
         let operation: Element<Message> = Text::new("Operation").into();
         let result: Element<Message> = Text::new("Result:").into();
 
-        let input_row_one = row!(r1);
-        let input_row_two = row!(r2);
+        let input_row_one = row!(r1,input_one);
+        let input_row_two = row!(r2,input_two);
         let button_row = row!(add_button, sub_button);
 
         let down_col_one = column!(
@@ -64,7 +68,7 @@ impl Application for Model {
             input_row_two,
             operation,
             button_row
-        );
+        ).width(Length::Fixed(350.0));
         let down_col_two = row!(result, text);
         let down_row = row!(down_col_one, down_col_two);
         let col_main = column!(heading, down_row);
