@@ -3,9 +3,9 @@ use iced::{executor, Application, Command, Element, Settings, Theme};
 
 #[derive(Default)]
 struct Model {
-    input_value_one: i32,
-    input_value_two: i32,
-    answer: i32,
+    input_value_one: String,
+    input_value_two: String,
+    answer: String,
 }
 #[derive(Debug, Clone)]
 pub enum Message {
@@ -23,9 +23,9 @@ impl Application for Model {
     fn new(_flag: Self::Flags) -> (Self, Command<Message>) {
         (
             Model {
-                input_value_one: 0,
-                input_value_two: 0,
-                answer: 0,
+                input_value_one: "".to_string(),
+                input_value_two: "".to_string(),
+                answer: "answer".to_string(),
             },
             Command::none(),
         )
@@ -41,7 +41,7 @@ impl Application for Model {
         let row_two = Row::with_children(vec![add_button, sub_button])
             .spacing(80)
             .padding(10);
-        let text: Element<Message> = Text::new(self.answer.to_string()).into();
+        let text: Element<Message> = Text::new(self.answer.clone()).into();
         let input_one: Element<Message> =
             TextInput
             ::new("R1 Register", &self.input_value_one.to_string())
@@ -59,8 +59,8 @@ impl Application for Model {
 
     fn update(&mut self, message: Message) -> Command<Message> {
         match message {
-            Message::Add => self.answer = self.input_value_one + self.input_value_two,
-            Message::Sub => self.answer = self.input_value_one - self.input_value_two,
+            Message::Add => self.answer = hex_calculation(1,self.input_value_one.clone() , self.input_value_two.clone()).to_string(),
+            Message::Sub => self.answer = hex_calculation(0,self.input_value_one.clone() , self.input_value_two.clone()).to_string(),
             Message::FirstValue(value_one)=>{self.input_value_one = value_one.parse().unwrap()},
             Message::SecondValue(value_two)=>{self.input_value_two = value_two.parse().unwrap()},
         }
@@ -70,4 +70,15 @@ impl Application for Model {
 
 fn main() -> Result<(), iced::Error> {
     Model::run(Settings::default())
+}
+
+fn hex_calculation(flag:u8,x:String,y:String)->u64{
+    let first = u64::from_str_radix(&x, 16).unwrap(); 
+    let second = u64::from_str_radix(&y, 16).unwrap(); 
+
+    if flag == 1{
+      return first.wrapping_add(second)
+    } else{
+      return first.wrapping_sub(second);
+    }
 }
