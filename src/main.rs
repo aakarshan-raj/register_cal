@@ -59,8 +59,8 @@ impl Application for Model {
 
     fn update(&mut self, message: Message) -> Command<Message> {
         match message {
-            Message::Add => self.answer = hex_calculation(1,self.input_value_one.clone() , self.input_value_two.clone()).to_string(),
-            Message::Sub => self.answer = hex_calculation(0,self.input_value_one.clone() , self.input_value_two.clone()).to_string(),
+            Message::Add => self.answer = format!("{:x}",hex_calculation(1,self.input_value_one.clone() , self.input_value_two.clone())),
+            Message::Sub => self.answer = format!("{:x}",hex_calculation(0,self.input_value_one.clone() , self.input_value_two.clone())),
             Message::FirstValue(value_one)=>{self.input_value_one = value_one.parse().unwrap()},
             Message::SecondValue(value_two)=>{self.input_value_two = value_two.parse().unwrap()},
         }
