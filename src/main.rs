@@ -35,7 +35,7 @@ impl Application for Model {
         String::from("x64 Intel Register Calculator")
     }
     fn view(&self) -> Element<Message> {
-        let heading: Element<Message> = Text::new("Register Calculator".to_string())
+        let heading: Element<Message> = Text::new("Register Calculator (64 bit[hex])".to_string())
         .width(Length::Fill)
         .horizontal_alignment(iced::alignment::Horizontal::Center)
         .size(20)
