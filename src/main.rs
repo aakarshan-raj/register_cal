@@ -1,4 +1,4 @@
-use iced::widget::{column, row, Button, Container, Row, Text, TextInput, Rule};
+use iced::widget::{column, row, Button, Container, Text, TextInput, Rule};
 use iced::{executor, window, Application, Command, Element, Settings, Theme, Length};
 
 #[derive(Default)]
@@ -129,8 +129,8 @@ fn main() -> Result<(), iced::Error> {
 }
 
 fn hex_calculation(flag: u8, x: String, y: String) -> u64 {
-    let first = u64::from_str_radix(&x, 16).unwrap();
-    let second = u64::from_str_radix(&y, 16).unwrap();
+    let first = u64::from_str_radix(&x, 16).unwrap_or_else(|_err|{ return 0 ; });
+    let second = u64::from_str_radix(&y, 16).unwrap_or_else(|_err|{ return 0 ; });
 
     if flag == 1 {
         return first.wrapping_add(second);
